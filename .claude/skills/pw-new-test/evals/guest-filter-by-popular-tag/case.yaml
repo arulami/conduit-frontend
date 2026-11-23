@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: guest-filter-by-popular-tag
+expected_outcome: |
+  A guest spec that clicks a tag in Popular Tags, captures the tag name before clicking, and asserts the feed tab and the listed articles relate to that tag.
