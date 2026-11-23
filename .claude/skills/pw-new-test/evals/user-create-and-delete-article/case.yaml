@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: user-create-and-delete-article
+expected_outcome: |
+  A user spec in tests/ui-tests/user/ that creates an article through New Article with a unique title, checks the article page shows that title, then deletes the article and confirms it is gone. Editor locators live in a new page object.

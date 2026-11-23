@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: guest-login-invalid-password
+expected_outcome: |
+  A guest spec in tests/ui-tests/guest/ that opens the home page, goes to Sign in through the header, submits a valid email with a wrong password, and asserts the error message and that the user is still on /login. Locators live in a login page object registered in PageManager.

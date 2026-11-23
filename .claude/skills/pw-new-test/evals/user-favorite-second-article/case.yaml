@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: user-favorite-second-article
+expected_outcome: |
+  A user spec that opens Global Feed, favourites the second article card, checks that card's count went up by one, then unfavourites it. The favourite button and count are scoped to the second card, not picked page-wide.
