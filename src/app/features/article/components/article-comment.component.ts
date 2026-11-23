@@ -10,7 +10,7 @@ import { AsyncPipe, DatePipe } from "@angular/common";
   selector: "app-article-comment",
   template: `
     @if (comment) {
-      <div class="card">
+      <div class="card" data-testid="comment-card">
         <div class="card-block">
           <p class="card-text">
             {{ comment.body }}
@@ -35,7 +35,11 @@ import { AsyncPipe, DatePipe } from "@angular/common";
           </span>
           @if (canModify$ | async) {
             <span class="mod-options">
-              <i class="ion-trash-a" (click)="delete.emit(true)"></i>
+              <i
+                class="ion-trash-a"
+                data-testid="comment-delete-icon"
+                (click)="delete.emit(true)"
+              ></i>
             </span>
           }
         </div>

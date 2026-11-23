@@ -1,6 +1,6 @@
 import { test as setup } from "@playwright/test";
 
-const userFile = "playwright-utils/.auth/user.json";
+const userFile = "playwright-utils/ui/.auth/user.json";
 
 setup("authenticate as user", async ({ page }) => {
   await page.goto("/");

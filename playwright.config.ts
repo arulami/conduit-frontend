@@ -29,17 +29,17 @@ export default defineConfig({
     },
     {
       name: "guest",
-      testDir: "./tests/guest",
+      testDir: "./tests/ui-tests/guest",
       use: {
         ...devices["Desktop Chrome"],
       },
     },
     {
       name: "user",
-      testDir: "./tests/user",
+      testDir: "./tests/ui-tests/user",
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "playwright-utils/.auth/user.json",
+        storageState: "playwright-utils/ui/.auth/user.json",
       },
       dependencies: ["auth-setup"],
     },

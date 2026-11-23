@@ -54,7 +54,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-playwright-utils/.auth/
+playwright-utils/ui/.auth/
 test-results/
 playwright-report/
 

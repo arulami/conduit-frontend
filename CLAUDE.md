@@ -13,7 +13,7 @@ npm start                  # dev server at http://localhost:4200
 npm run build              # production build -> dist/angular-conduit/
 npm run test:e2e           # Playwright tests (dev server must already be running)
 npm run test:e2e:ui        # Playwright UI mode
-npx playwright test tests/guest/smoke.spec.ts          # single file
+npx playwright test tests/ui-tests/guest/smoke.spec.ts # single file
 npx playwright test -g "Home page loads"               # single test by title
 npx playwright test --project=user                     # one project (runs auth-setup first)
 TEST_ENV=<env> npx playwright test                     # load .env.test.<env> instead of .env.test.local
@@ -46,10 +46,10 @@ TEST_ENV=<env> npx playwright test                     # load .env.test.<env> in
 
 - `playwright.config.ts` loads `.env.test.${TEST_ENV ?? 'local'}` from the **project root** via dotenv. That file holds `BASE_URL`, `USER_EMAIL` and `USER_PASSWORD`, and git ignores it; only `.env.test.example` is committed.
 - Projects:
-  - `auth-setup` (`tests/auth.setup.ts`) logs in through the UI and saves `playwright-utils/.auth/user.json`.
-  - `user` (`tests/user/`) reuses that session and depends on `auth-setup`.
-  - `guest` (`tests/guest/`) runs unauthenticated.
-- Support code lives in `playwright-utils/` (`fixtures/index.ts` is the extended `test`/`expect`, `types/env.d.ts` types `process.env`). Page objects go in `playwright-utils/pages/`.
+  - `auth-setup` (`tests/ui-tests/auth.setup.ts`) logs in through the UI and saves `playwright-utils/ui/.auth/user.json`.
+  - `user` (`tests/ui-tests/user/`) reuses that session and depends on `auth-setup`.
+  - `guest` (`tests/ui-tests/guest/`) runs unauthenticated.
+- UI tests use the Page Object Model. Page objects live in `playwright-utils/ui/pages/`, `PageManager` (`playwright-utils/ui/fixtures/page-manager.ts`) creates them, and specs get them through the `pom` fixture from `playwright-utils/ui/fixtures`. `playwright-utils/types/env.d.ts` types `process.env`.
 - Login form quirks: the inputs have no `<label>`, only placeholders. `getByRole('textbox', { name: 'Email' })` works, but the password input needs `getByPlaceholder('Password')`. Both the header link and the submit button say "Sign in".
-- `.claude/rules/playwright-{scripting,architecture}.md` contain the test-authoring conventions. Their `paths` frontmatter targets `tests/ui-tests/**` and `playwright-utils/ui/**`, which **don't match the current `tests/<role>/` layout**, so they don't auto-load. Read them manually when writing tests until the layout or the paths are aligned.
+- `.claude/rules/playwright-{scripting,architecture}.md` hold the test-authoring conventions and auto-load for `tests/ui-tests/**` and `playwright-utils/ui/**`.
 - The backend is shared with other users: give test data unique names (for example, add a timestamp) and clean up what tests create.
