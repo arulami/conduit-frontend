@@ -41,6 +41,8 @@ For each page or component involved in the test steps:
 
 Skip lines that are _intentionally_ multi-line because the content itself contains newlines (template strings spanning real newlines, multi-line array literals where each entry is meant to be readable, etc.).
 
+- **Confirm the test loads.** Run `npx playwright test --list -g "<exact test title>"` and check the new test appears by its title with no errors. This only compiles and lists tests; it does not run them, so it's allowed before step 4. Fix any import, type or syntax error it reports before moving on.
+
 ### 4. Ask user to run or adjust
 
 After writing the test, use the `AskUserQuestion` tool to present the user with a choice:

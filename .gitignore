@@ -63,3 +63,6 @@ playwright-report/
 .env.local
 .env.test.*
 !.env.test.example
+
+# Local plugin eval run outputs (transcripts, reports)
+.claude/skills/*/evals/results/
