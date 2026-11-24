@@ -26,3 +26,9 @@ graders:
     target: trace
     pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?\.goto\('
     match: not_contains
+  - name: 10a-no-test-run-before-asking
+    type: tool_used
+    tool: Bash
+    input_match: '"command":"(?:[^"\\]|\\.)*?(?:playwright test|test:e2e)(?!(?:[^"\\]|\\.)*--list)'
+    min: 0
+    max: 0

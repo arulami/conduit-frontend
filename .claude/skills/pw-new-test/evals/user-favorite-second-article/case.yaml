@@ -18,7 +18,7 @@ graders:
   - name: 12-lists-without-errors
     type: tool_used
     tool: Bash
-    input_match: 'playwright test[^"]*--list'
+    input_match: '"command":"(?:[^"\\]|\\.)*?playwright test(?:[^"\\]|\\.)*--list'
   - name: 08a-starts-from-home
     type: regex
     target: trace
@@ -29,3 +29,15 @@ graders:
     target: trace
     pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?\.goto\('
     match: not_contains
+  - name: 11a-no-test-run-before-asking
+    type: tool_used
+    tool: Bash
+    input_match: '"command":"(?:[^"\\]|\\.)*?(?:playwright test|test:e2e)(?!(?:[^"\\]|\\.)*--list)'
+    min: 0
+    max: 0
+  - name: 11b-offers-run-the-test
+    type: regex
+    target: last_message
+    pattern: 'Run the test'
+    flags: i
+    match: contains
