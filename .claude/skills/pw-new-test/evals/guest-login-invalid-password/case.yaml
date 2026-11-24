@@ -4,3 +4,46 @@ expected_outcome: |
   A guest spec in tests/ui-tests/guest/ that opens the home page, goes to Sign in through the header, submits a valid email with a wrong password, and asserts the error message and that the user is still on /login. Locators live in a login page object registered in PageManager.
 context:
   scaffold_script: scaffold.sh
+graders:
+  - name: 01-guest-folder
+    type: file_exists
+    path: 'tests/ui-tests/guest/*.spec.ts'
+  - name: 02-password-placeholder
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?getByPlaceholder\((?:\\"|'')Password(?:\\"|'')\)'
+    match: contains
+  - name: 05-no-hardcoded-credentials
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?process\.env\.USER_EMAIL'
+    match: contains
+  - name: 06-uses-pom-fixture
+    type: regex
+    target: trace
+    pattern: '"name":"Write","input":\{"file_path":"[^"]*\.spec\.ts","content":"(?:[^"\\]|\\.)*?from (?:\\"|'')(?:\.\./)+playwright-utils/ui/fixtures(?:\\"|'')'
+    match: contains
+  - name: 10-no-banned-patterns
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*/(?:tests|playwright-utils)/)(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?(?:waitForTimeout|expect\.soft|setTimeout\(|timeout: ?\d|locator\((?:\\"|'')\.)'
+    match: not_contains
+  - name: 13-lists-without-errors
+    type: tool_used
+    tool: Bash
+    input_match: 'playwright test[^"]*--list'
+  - name: 09a-starts-from-home
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?pom\.homePage\.open\(\)'
+    match: contains
+  - name: 09b-no-goto-in-spec
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?\.goto\('
+    match: not_contains
+  - name: 03-submit-button-not-link
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?getByRole\((?:\\"|'')button(?:\\"|''),(?:\s|\\n)*\{(?:\s|\\n)*name:(?:\s|\\n)*(?:\\"|''|/)Sign in'
+    match: contains

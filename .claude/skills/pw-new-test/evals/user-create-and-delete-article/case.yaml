@@ -4,3 +4,31 @@ expected_outcome: |
   A user spec in tests/ui-tests/user/ that creates an article through New Article with a unique title, checks the article page shows that title, then deletes the article and confirms it is gone. Editor locators live in a new page object.
 context:
   scaffold_script: scaffold.sh
+graders:
+  - name: 01-user-folder
+    type: file_exists
+    path: 'tests/ui-tests/user/*.spec.ts'
+  - name: 06-uses-pom-fixture
+    type: regex
+    target: trace
+    pattern: '"name":"Write","input":\{"file_path":"[^"]*\.spec\.ts","content":"(?:[^"\\]|\\.)*?from (?:\\"|'')(?:\.\./)+playwright-utils/ui/fixtures(?:\\"|'')'
+    match: contains
+  - name: 10-no-banned-patterns
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*/(?:tests|playwright-utils)/)(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?(?:waitForTimeout|expect\.soft|setTimeout\(|timeout: ?\d|locator\((?:\\"|'')\.)'
+    match: not_contains
+  - name: 13-lists-without-errors
+    type: tool_used
+    tool: Bash
+    input_match: 'playwright test[^"]*--list'
+  - name: 09a-starts-from-home
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?pom\.homePage\.open\(\)'
+    match: contains
+  - name: 09b-no-goto-in-spec
+    type: regex
+    target: trace
+    pattern: '"name":"(?:Write|Edit)","input":\{(?=(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"file_path":"[^"]*\.spec\.ts")(?:[^{}"]|"(?:[^"\\]|\\.)*")*?"(?:content|new_string)":"(?:[^"\\]|\\.)*?\.goto\('
+    match: not_contains
